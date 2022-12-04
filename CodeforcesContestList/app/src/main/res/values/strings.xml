@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">One</string>
+    <string name="upcoming_contests">Upcoming Contests</string>
+    <string name="finished_contests">Finished Contests</string>
+    <string name="codeforces_contests">Codeforces Contests</string>
+    <string name="contests_info">Contests info</string>
+</resources>
