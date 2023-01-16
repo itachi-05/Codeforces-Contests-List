@@ -92,6 +92,7 @@ class CallFragment : Fragment() {
         }
         return true
     }
+
     private fun reorderingPhoneNumber(phoneNumber: String?): String {
         var s = ""
         if (phoneNumber != null) {
@@ -139,6 +140,5 @@ class CallFragment : Fragment() {
             Toast.makeText(activity,"Try again later",Toast.LENGTH_SHORT).show()
         }
     }
-
 
 }

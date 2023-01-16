@@ -2,7 +2,6 @@ package com.example.driftdb
 
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -21,7 +20,7 @@ import java.io.File
 class Profile : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var databseReference: DatabaseReference
+    private lateinit var databaseReference: DatabaseReference
     private lateinit var sharedPref: SharedPreferences
     private lateinit var phoneNumber: String
     private lateinit var storageReference: StorageReference
@@ -61,13 +60,13 @@ class Profile : AppCompatActivity() {
 
 
         binding.saveInfoBtn.setOnClickListener{
-            databseReference = FirebaseDatabase.getInstance().getReference("Users")
+            databaseReference = FirebaseDatabase.getInstance().getReference("Users")
             val changedUserName = binding.enterYourName.text.toString()
             val changedAbout = binding.enterYourStatus.text.toString()
 
 //            NO NEED OF USER() CLASS, TO SET DATA , WE JUST HAVE TO UPDATE CHILDREN
 //            val user = User(userName=changedUserName,userPhoneNumber=phoneNumber,status=changedAbout)
-            databseReference.child(phoneNumber).updateChildren(
+            databaseReference.child(phoneNumber).updateChildren(
                 mapOf(
                     "userName" to changedUserName,
                     "userPhoneNumber" to phoneNumber,
@@ -89,8 +88,8 @@ class Profile : AppCompatActivity() {
     }
 
     private fun readData(numberCheck: String){
-        databseReference = FirebaseDatabase.getInstance().getReference("Users")
-        databseReference.child(numberCheck).get().addOnSuccessListener {
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        databaseReference.child(numberCheck).get().addOnSuccessListener {
             if(it.exists()){
                 val databaseUserName = it.child("userName").value.toString()
                 if(databaseUserName.isNotEmpty()){
@@ -119,9 +118,9 @@ class Profile : AppCompatActivity() {
 
     private fun getProfilePic() {
         storageReference = FirebaseStorage.getInstance().reference.child("images/$phoneNumber")
-        val localfile = File.createTempFile("tempImage","")
-        storageReference.getFile(localfile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+        val localFile = File.createTempFile("tempImage","")
+        storageReference.getFile(localFile).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
             binding.userProfileImage.setImageBitmap(bitmap)
         }.addOnFailureListener{
 //             Image can not be loaded when user login's for first time

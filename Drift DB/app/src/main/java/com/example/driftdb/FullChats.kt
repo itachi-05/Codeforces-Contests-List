@@ -55,15 +55,14 @@ open class FullChats : AppCompatActivity() {
         }
         // video call btn
 
-
         messageList = ArrayList()
         messageAdapter = MessageAdapter(this,messageList)
-
 
         // logic for adding data to recyclerView
         db.child("All MESSAGES").child(senderRoom!!).child("messages")
             .addValueEventListener(object: ValueEventListener{
 
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onDataChange(snapshot: DataSnapshot) {
                     messageList.clear()
                     var count = 0
@@ -93,8 +92,6 @@ open class FullChats : AppCompatActivity() {
                     Toast.makeText(baseContext, "DB ERROR",Toast.LENGTH_SHORT).show()
                 }
             })
-
-
 
         // adding the message to Database
         binding.sentButton.setOnClickListener{

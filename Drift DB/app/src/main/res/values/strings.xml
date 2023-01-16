@@ -22,5 +22,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="modes">Modes</string>
     <string name="status_will_be_shown_here">Status will be shown here</string>
+    <string name="contacts">Contacts</string>
+    <string name="contacts_on_drift">Contacts on Drift</string>
+    <string name="type_a_message">Type a Message</string>
 
 </resources>

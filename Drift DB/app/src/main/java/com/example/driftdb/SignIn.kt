@@ -19,7 +19,6 @@ import com.google.firebase.auth.*
 import com.google.firebase.database.*
 import java.util.concurrent.TimeUnit
 
-
 class SignIn : AppCompatActivity(), FirebaseListener {
     private lateinit var binding: ActivitySignInBinding
     private lateinit var auth: FirebaseAuth
@@ -97,7 +96,6 @@ class SignIn : AppCompatActivity(), FirebaseListener {
         }
 //        Log.i("F","OK")
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -204,7 +202,6 @@ class SignIn : AppCompatActivity(), FirebaseListener {
             }
         }
     }
-
 
     private fun renamingUserName(username: String): String {
         var s = ""
@@ -369,5 +366,4 @@ class SignIn : AppCompatActivity(), FirebaseListener {
         }
 
     }
-
 }

@@ -250,7 +250,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         }
     }
 
-
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
     }
@@ -260,7 +259,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         super.onDestroy()
         binding = null
     }
-
 
     // PERMISSIONS
     private fun requestingPermissions() {
