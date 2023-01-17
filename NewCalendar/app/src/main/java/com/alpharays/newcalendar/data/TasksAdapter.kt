@@ -29,13 +29,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import android.app.Activity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.Observer
 
 
 class TasksAdapter(private val context: Context, private var userTaskList: ArrayList<UserTask>) :
     RecyclerView.Adapter<TasksAdapter.MyViewHolder>() {
 
-    private val updateViewModel: UpdateTaskViewModel = ViewModelProvider(context as ViewModelStoreOwner)[UpdateTaskViewModel::class.java]
+    private val updateViewModel: UpdateTaskViewModel =
+        ViewModelProvider(context as ViewModelStoreOwner)[UpdateTaskViewModel::class.java]
     private var aStr = "Task Name can not be empty"
     private var bStr = "Wrong Start Time entered"
     private var cStr = "Wrong End Time entered"
@@ -109,142 +112,126 @@ class TasksAdapter(private val context: Context, private var userTaskList: Array
                 updateDialog?.dismiss()
             }
             // ViewModel Work
-//            updateViewModel.updateDataInFirebase(currentTask.taskDate.toString(),context,currentTask.taskKey.toString(),currentTask)
-//            // db work
-//            databaseReference.child(currentTask.taskDate.toString()).get().addOnSuccessListener {
-//                for (data in it.children) {
-//                    val userDataKey = data.key
-//                    val userDataValue = data.getValue(UserTask::class.java)
-//                    if (userDataKey == currentTask.taskKey) {
-//                        Log.i("userDataKey", userDataKey.toString())
-////                  Get User Data
-//                        updateDialog?.findViewById<TextView>(R.id.event_task_name)?.text =
-//                            userDataValue?.taskName
-//                        updateDialog?.findViewById<TextView>(R.id.event_date)?.text =
-//                            userDataValue?.taskDate
-//                        updateDialog?.findViewById<TextView>(R.id.event_task_start_time)?.text =
-//                            userDataValue?.taskStartTime
-//                        updateDialog?.findViewById<TextView>(R.id.event_task_end_time)?.text =
-//                            userDataValue?.taskEndTime
-//                        updateDialog?.findViewById<TextView>(R.id.event_task_location)?.text =
-//                            userDataValue?.taskVenue
-////
-////                        // ##########################################  collecting data from the dialog box   ##########################################
-//                        val myCalendar = Calendar.getInstance()
-//                        val datePicker =
-//                            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-//                                myCalendar.set(Calendar.YEAR, year)
-//                                myCalendar.set(Calendar.MONTH, month)
-//                                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-//                                val format = "dd-MM-yyyy"
-//                                val sdf = SimpleDateFormat(format, Locale.UK)
-//                                updateDialog?.findViewById<TextView>(R.id.event_date)?.text =
-//                                    sdf.format(myCalendar.time)
-//                            }
-//                        val taskDatePicker =
-//                            updateDialog?.findViewById<Button>(R.id.task_datePicker_btn)
-//                        taskDatePicker?.setOnClickListener {
-//                            DatePickerDialog(
-//                                context,
-//                                datePicker,
-//                                myCalendar.get(Calendar.YEAR),
-//                                myCalendar.get(Calendar.MONTH),
-//                                myCalendar.get(Calendar.DAY_OF_MONTH)
-//                            ).show()
-//                        }
-//                        val taskSubmitBtn = updateDialog?.findViewById<Button>(R.id.task_submit_btn)
-//                        taskSubmitBtn?.setOnClickListener {
-//                            var taskName =
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_name)?.text.toString()
-//                            var taskStartTime =
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_start_time)?.text.toString()
-//                            var taskEndTime =
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_end_time)?.text.toString()
-//                            var taskVenue =
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_location)?.text.toString()
-//                            val checkingDatePicked =
-//                                updateDialog?.findViewById<TextView>(R.id.event_date)?.text
-//
-//                            if (checkingDatePicked == "No Date Picked") Toast.makeText(
-//                                context,
-//                                "Please Select the Date...",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            else if (!checkStrings(taskName)) Toast.makeText(
-//                                context,
-//                                aStr,
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            else if (!checkStrings(taskStartTime)) Toast.makeText(
-//                                context,
-//                                bStr,
-//                                Toast.LENGTH_SHORT
-//                            )
-//                                .show()
-//                            else if (!checkStrings(taskEndTime)) Toast.makeText(
-//                                context,
-//                                cStr,
-//                                Toast.LENGTH_SHORT
-//                            )
-//                                .show()
-//                            else if (!checkStrings(taskVenue)) Toast.makeText(
-//                                context,
-//                                dStr,
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            else {
-//                                taskName = reorderStrings(taskName)
-//                                taskStartTime = reorderStrings(taskStartTime)
-//                                taskEndTime = reorderStrings(taskEndTime)
-//                                taskVenue = reorderStrings(taskVenue)
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_name)
-//                                    ?.setText("")
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_start_time)
-//                                    ?.setText("")
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_end_time)
-//                                    ?.setText("")
-//                                updateDialog?.findViewById<EditText>(R.id.event_task_location)
-//                                    ?.setText("")
-////                                // ****************************************   Adding to database ****************************************
-//                                databaseReference.child(checkingDatePicked.toString())
-//                                    .child(userDataKey.toString()).updateChildren(
-//                                        mapOf(
-//                                            "taskKey" to userDataKey,
-//                                            "taskDate" to checkingDatePicked,
-//                                            "taskName" to taskName,
-//                                            "taskStartTime" to taskStartTime,
-//                                            "taskEndTime" to taskEndTime,
-//                                            "taskVenue" to taskVenue
-//                                        )
-//                                    ).addOnCompleteListener {
-//                                        Toast.makeText(context, "Updated", Toast.LENGTH_SHORT)
-//                                            .show()
-//                                    }
-//                                    .addOnFailureListener {
-//                                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
-//                                    }
-////                            binding.progressBarTask.visibility = View.VISIBLE
-////                            tasksToday(checkingDatePicked.toString())
-//                                val sharedPref: SharedPreferences = context.getSharedPreferences(
-//                                    "UpdateTaskSF",
-//                                    Context.MODE_PRIVATE
-//                                )
-//                                val editor = sharedPref.edit()
-//                                editor.putString("OK", "true")
-//                                editor.apply()
-//                                updateDialog?.dismiss()
+            updateViewModel.updateDataInFirebase(
+                currentTask.taskDate.toString(),
+                context,
+                currentTask.taskKey.toString(),
+                currentTask
+            )
+            var userTaskKey = ""
+            updateViewModel.getData().observe(context as LifecycleOwner, Observer { userDataValue ->
+                Log.i("data found", userDataValue.toString())
+                userTaskKey = userDataValue.taskKey.toString()
+                updateDialog?.findViewById<TextView>(R.id.event_task_name)?.text =
+                    userDataValue?.taskName
+                updateDialog?.findViewById<TextView>(R.id.event_date)?.text =
+                    userDataValue?.taskDate
+                updateDialog?.findViewById<TextView>(R.id.event_task_start_time)?.text =
+                    userDataValue?.taskStartTime
+                updateDialog?.findViewById<TextView>(R.id.event_task_end_time)?.text =
+                    userDataValue?.taskEndTime
+                updateDialog?.findViewById<TextView>(R.id.event_task_location)?.text =
+                    userDataValue?.taskVenue
+            })
+
+//                        // ##########################################  collecting data from the dialog box   ##########################################
+            val myCalendar = Calendar.getInstance()
+            val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                myCalendar.set(Calendar.YEAR, year)
+                myCalendar.set(Calendar.MONTH, month)
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                val format = "dd-MM-yyyy"
+                val sdf = SimpleDateFormat(format, Locale.UK)
+                updateDialog?.findViewById<TextView>(R.id.event_date)?.text =
+                    sdf.format(myCalendar.time)
+            }
+            val taskDatePicker = updateDialog?.findViewById<Button>(R.id.task_datePicker_btn)
+            taskDatePicker?.setOnClickListener {
+                DatePickerDialog(
+                    context,
+                    datePicker,
+                    myCalendar.get(Calendar.YEAR),
+                    myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)
+                ).show()
+            }
+            val taskSubmitBtn = updateDialog?.findViewById<Button>(R.id.task_submit_btn)
+            taskSubmitBtn?.setOnClickListener {
+                var taskName =
+                    updateDialog?.findViewById<EditText>(R.id.event_task_name)?.text.toString()
+                var taskStartTime =
+                    updateDialog?.findViewById<EditText>(R.id.event_task_start_time)?.text.toString()
+                var taskEndTime =
+                    updateDialog?.findViewById<EditText>(R.id.event_task_end_time)?.text.toString()
+                var taskVenue =
+                    updateDialog?.findViewById<EditText>(R.id.event_task_location)?.text.toString()
+                val checkingDatePicked =
+                    updateDialog?.findViewById<TextView>(R.id.event_date)?.text
+
+                if (checkingDatePicked == "No Date Picked") Toast.makeText(
+                    context,
+                    "Please Select the Date...",
+                    Toast.LENGTH_SHORT
+                ).show()
+                else if (!checkStrings(taskName)) Toast.makeText(
+                    context,
+                    aStr,
+                    Toast.LENGTH_SHORT
+                ).show()
+                else if (!checkStrings(taskStartTime)) Toast.makeText(
+                    context,
+                    bStr,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                else if (!checkStrings(taskEndTime)) Toast.makeText(
+                    context,
+                    cStr,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                else if (!checkStrings(taskVenue)) Toast.makeText(
+                    context,
+                    dStr,
+                    Toast.LENGTH_SHORT
+                ).show()
+                else {
+                    taskName = reorderStrings(taskName)
+                    taskStartTime = reorderStrings(taskStartTime)
+                    taskEndTime = reorderStrings(taskEndTime)
+                    taskVenue = reorderStrings(taskVenue)
+                    updateDialog?.findViewById<EditText>(R.id.event_task_name)
+                        ?.setText("")
+                    updateDialog?.findViewById<EditText>(R.id.event_task_start_time)
+                        ?.setText("")
+                    updateDialog?.findViewById<EditText>(R.id.event_task_end_time)
+                        ?.setText("")
+                    updateDialog?.findViewById<EditText>(R.id.event_task_location)
+                        ?.setText("")
 //                                // ****************************************   Adding to database ****************************************
-//                            }
-//                        }
-////                        // ##########################################  collecting data from the dialog box   ##########################################
-////                        // db work
-//                        updateDialog?.setCancelable(false)
-//                        updateDialog?.setCanceledOnTouchOutside(false)
-//                        updateDialog?.show()
-//                        notifyDataSetChanged()
-//                    }
-//                }
-//            }
+                    val finalUserDataTask = UserTask(
+                        taskKey = userTaskKey,
+                        taskDate = checkingDatePicked.toString(),
+                        taskName = taskName,
+                        taskStartTime = taskStartTime,
+                        taskEndTime = taskEndTime,
+                        taskVenue = taskVenue
+                    )
+                    updateViewModel.updateDataInFirebase(
+                        checkingDatePicked.toString(),
+                        context,
+                        userTaskKey,
+                        finalUserDataTask
+                    )
+                    updateDialog?.dismiss()
+                    // ****************************************   Adding to database ****************************************
+                }
+            }
+//                        // ##########################################  collecting data from the dialog box   ##########################################
+            updateDialog?.setCancelable(false)
+            updateDialog?.setCanceledOnTouchOutside(false)
+            updateDialog?.show()
+            notifyDataSetChanged()
         }
     }
 

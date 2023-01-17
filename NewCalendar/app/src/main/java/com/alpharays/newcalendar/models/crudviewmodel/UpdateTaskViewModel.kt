@@ -2,6 +2,7 @@ package com.alpharays.newcalendar.models.crudviewmodel
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,11 +19,12 @@ class UpdateTaskViewModel : ViewModel() {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var databaseReference: DatabaseReference =
         FirebaseDatabase.getInstance().getReference("Users").child(auth.currentUser?.uid.toString())
-    private val data = MutableLiveData<List<UserTask>>()
+    private val data = MutableLiveData<UserTask>()
 
     fun updateDataInFirebase(date: String, context: Context, key: String, task: UserTask) {
         viewModelScope.launch(Dispatchers.IO) {
             firebaseUpdateCall(context, date, key, task)
+            data.postValue(firebaseGetDataCall(date, key))
         }
     }
 
@@ -40,8 +42,25 @@ class UpdateTaskViewModel : ViewModel() {
             updates["taskStartTime"] = task.taskStartTime.toString(); updates["taskEndTime"] =
                 task.taskEndTime.toString(); updates["taskVenue"] = task.taskVenue.toString()
             databaseReference.child(date).child(key).updateChildren(updates)
+            Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Log.i("Error firebase", e.toString())
         }
     }
+
+    private suspend fun firebaseGetDataCall(date: String, key: String): UserTask {
+        return try {
+            val snapshot = databaseReference.child(date).child(key).get().await()
+            val dataList: UserTask = snapshot.getValue(UserTask::class.java)!!
+            dataList
+        } catch (e: Exception) {
+            Log.i("Error firebase", e.toString())
+            UserTask()
+        }
+    }
+
+    fun getData(): LiveData<UserTask> {
+        return data
+    }
+
 }

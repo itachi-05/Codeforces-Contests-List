@@ -14,13 +14,14 @@ import kotlinx.coroutines.tasks.await
 
 class CreateTaskViewModel : ViewModel() {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
-        .child(auth.currentUser?.uid.toString())
+    private var databaseReference: DatabaseReference =
+        FirebaseDatabase.getInstance().getReference("Users")
+            .child(auth.currentUser?.uid.toString())
 
     fun postDataToFirebase(context: Context, date: String, tasks: UserTask) {
         viewModelScope.launch(Dispatchers.IO) {
-            firebaseCall(context,date,tasks)
-            firebaseAddTaskKey(context,date)
+            firebaseCall(context, date, tasks)
+            firebaseAddTaskKey(context, date)
         }
     }
 
@@ -33,19 +34,19 @@ class CreateTaskViewModel : ViewModel() {
                     } else {
                         val exception = task.exception
                         // handle error
-                        Log.i("ERROR: 110",exception.toString())
+                        Log.i("ERROR: 110", exception.toString())
                     }
                 }
         } catch (e: Exception) {
             // handle error
-            Log.i("ERROR: 111","Inside catch block $e")
+            Log.i("ERROR: 111", "Inside catch block $e")
         }
     }
 
     private suspend fun firebaseAddTaskKey(context: Context, date: String) {
         try {
             val db = databaseReference.child(date).get().await()
-            for(data in db.children){
+            for (data in db.children) {
                 val key = data.key
                 val updates = HashMap<String, Any>()
                 updates["taskKey"] = key.toString()
@@ -53,7 +54,8 @@ class CreateTaskViewModel : ViewModel() {
             }
         } catch (e: Exception) {
             // handle error
-            Log.i("ERROR: 112","Inside catch block $e")
+            Log.i("ERROR: 112", "Inside catch block $e")
         }
     }
+
 }

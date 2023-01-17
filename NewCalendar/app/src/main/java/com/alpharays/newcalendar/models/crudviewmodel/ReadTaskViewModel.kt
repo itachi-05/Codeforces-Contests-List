@@ -42,6 +42,7 @@ class ReadTaskViewModel : ViewModel() {
             emptyList()
         }
     }
+
     fun getData1(): LiveData<List<UserTask>> {
         return data
     }
@@ -50,7 +51,7 @@ class ReadTaskViewModel : ViewModel() {
         return try {
             val dbRef = databaseReference.get().await()
             val dataList = mutableListOf<String>()
-            for(data in dbRef.children){
+            for (data in dbRef.children) {
                 dataList.add(data.key.toString())
             }
             dataList
@@ -59,7 +60,9 @@ class ReadTaskViewModel : ViewModel() {
             emptyList()
         }
     }
-    fun getData2(): LiveData<List<String>>{
+
+    fun getData2(): LiveData<List<String>> {
         return datesList
     }
+
 }
