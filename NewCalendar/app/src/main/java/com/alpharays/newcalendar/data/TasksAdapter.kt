@@ -233,6 +233,7 @@ class TasksAdapter(private val context: Context, private var userTaskList: Array
             updateDialog?.show()
             notifyDataSetChanged()
         }
+
     }
 
     override fun getItemCount(): Int {
