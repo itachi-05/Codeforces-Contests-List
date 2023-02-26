@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "409858533864",
+    "project_id": "my-drift-e3265",
+    "storage_bucket": "my-drift-e3265.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409858533864:android:4ac72efd2e6ee8f65a5c5d",
+        "android_client_info": {
+          "package_name": "com.alpharays.drift"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409858533864-7s35vi6ar1cnbgfcgn3riceqgtilrskt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alpharays.drift",
+            "certificate_hash": "c46f4410f91f5fffc49acabd59623bc59bf788ba"
+          }
+        },
+        {
+          "client_id": "409858533864-038rifupjb5oke4jer7j3b20hpn4d0s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-2eEM-u73gUQtCy01vVV3Y6P4fIHJ6g0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "409858533864-038rifupjb5oke4jer7j3b20hpn4d0s0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

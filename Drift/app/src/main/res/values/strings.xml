@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Drift</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="drift">Drift</string>
+    <string name="error">Error</string>
+    <string name="alert">Alert</string>
+</resources>
